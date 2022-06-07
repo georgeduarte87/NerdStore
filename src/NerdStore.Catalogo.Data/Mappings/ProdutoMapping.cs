@@ -13,11 +13,11 @@ namespace NerdStore.Catalogo.Data.Mappings
 
             builder.Property(c => c.Nome)
                 .IsRequired()
-                .HasColumnType("carchar(250)");
+                .HasColumnType("varchar(250)");
 
-            builder.Property(c => c.Nome)
+            builder.Property(c => c.Descricao)
                 .IsRequired()
-                .HasColumnType("carchar(500)");
+                .HasColumnType("varchar(500)");
 
             builder.OwnsOne(c => c.Dimensoes, cm =>
             {
