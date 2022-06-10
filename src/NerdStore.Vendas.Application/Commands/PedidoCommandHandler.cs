@@ -5,16 +5,20 @@ using System.Threading.Tasks;
 using NerdStore.Core.Messages;
 using NerdStore.Vendas.Domain;
 using System.Linq;
+using NerdStore.Core.Bus;
 
 namespace NerdStore.Vendas.Application.Commands
 {
     public class PedidoCommandHandler : IRequestHandler<AdicionarItemPedidoCommand, bool>
     {
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly IMediatorHandler _mediatorHandler;
 
-        public PedidoCommandHandler(IPedidoRepository pedidoRepository)
+        public PedidoCommandHandler(IPedidoRepository pedidoRepository,
+                                    IMediatorHandler mediatorHandler)
         {
             _pedidoRepository = pedidoRepository;
+            _mediatorHandler = mediatorHandler;
         }
 
         public async Task<bool> Handle(AdicionarItemPedidoCommand message, CancellationToken cancellationToken)
