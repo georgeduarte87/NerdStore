@@ -29,12 +29,9 @@ namespace NerdStore.WebApp.MVC.Setup
             services.AddScoped<INotificationHandler<ProdutoAbaixoEstoqueEvent>, ProdutoEventHandler>();
 
             //Vendas
-            services.AddScoped<IPedidoRepository, PedidoRepository>();
-            //services.AddScoped<IPedidoQueries, PedidoQueries>();
-            services.AddScoped<VendasContext>();
-
             services.AddScoped<IRequestHandler<AdicionarItemPedidoCommand, bool>, PedidoCommandHandler>();
-            
+            services.AddScoped<IPedidoRepository, PedidoRepository>();
+            services.AddScoped<VendasContext>();          
         }
     }
 }
