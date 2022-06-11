@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NerdStore.Catalogo.Application.Services;
-using NerdStore.Core.Bus;
-using NerdStore.Vendas.Application.Commands;
-using System;
+﻿using System;
+using MediatR;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using NerdStore.Catalogo.Application.Services;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
+using NerdStore.Vendas.Application.Commands;
+
 
 namespace NerdStore.WebApp.MVC.Controllers
 {
@@ -13,7 +16,8 @@ namespace NerdStore.WebApp.MVC.Controllers
         private readonly IMediatorHandler _mediatorHandler;
 
         public CarrinhoController(IProdutoAppService produtoAppService,
-                                  IMediatorHandler mediatorHandler)
+                                  IMediatorHandler mediatorHandler,
+                                  INotificationHandler<DomainNotification> notifications) : base(notifications, mediatorHandler)
         {
             _produtoAppService = produtoAppService;
             _mediatorHandler = mediatorHandler;
@@ -42,8 +46,15 @@ namespace NerdStore.WebApp.MVC.Controllers
             await _mediatorHandler.EnviarComando(command);
 
             // Se tudo deu certo?
+            if(OperacaoValida())
+            {
+                return RedirectToAction("Index");
+            }
 
-            TempData["Erro"] = "Produto Indisponível";
+            //TempData["Erro"] = "Produto Indisponível";
+            //return RedirectToAction("ProdutoDetalhe", "Vitrine", new { id });
+
+            TempData["Erros"] = ObterMensagensErro();
             return RedirectToAction("ProdutoDetalhe", "Vitrine", new { id });
 
         }
