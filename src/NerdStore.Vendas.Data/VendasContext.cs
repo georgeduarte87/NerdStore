@@ -41,8 +41,12 @@ namespace NerdStore.Vendas.Data
                 }
             }
 
+            //await _mediatorHandler.PublicarEventos(this);
+            //return await base.SaveChangesAsync() > 0;
+
+            // Versão final
             var sucesso = await base.SaveChangesAsync() > 0;
-            //if (sucesso) await _mediatorHandler.PublicarEventos(this);
+            if (sucesso) await _mediatorHandler.PublicarEventos(this);
 
             return sucesso;
         }
@@ -59,6 +63,7 @@ namespace NerdStore.Vendas.Data
                     .Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");
 
+            // Pede pra ignorar eventos
             modelBuilder.Ignore<Event>();
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(VendasContext).Assembly);

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NerdStore.Catalogo.Domain;
 using NerdStore.Core.Data;
-
+using NerdStore.Core.Messages;
 
 namespace NerdStore.Catalogo.Data
 {
@@ -26,6 +26,9 @@ namespace NerdStore.Catalogo.Data
                 .SelectMany(e => e.GetProperties()
                     .Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");
+
+            // Pede pra ignorar eventos
+            modelBuilder.Ignore<Event>();
 
             //base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogoContext).Assembly);
