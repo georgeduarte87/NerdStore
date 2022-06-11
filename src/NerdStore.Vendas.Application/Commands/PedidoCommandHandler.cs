@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using NerdStore.Core.Messages;
 using NerdStore.Vendas.Domain;
 using System.Linq;
-using NerdStore.Core.Bus;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 
 namespace NerdStore.Vendas.Application.Commands
 {
     public class PedidoCommandHandler : IRequestHandler<AdicionarItemPedidoCommand, bool>
     {
         private readonly IPedidoRepository _pedidoRepository;
-        private readonly IMediatorHandler _mediatorHandler;
+        private readonly IMediatorHandler _mediatorHandler;  // Inserido antes, no copia e cola
 
         public PedidoCommandHandler(IPedidoRepository pedidoRepository,
                                     IMediatorHandler mediatorHandler)
@@ -60,6 +61,7 @@ namespace NerdStore.Vendas.Application.Commands
             foreach(var error in message.ValidationResult.Errors)
             {
                 // Lançar um evento de erro
+                _mediatorHandler.PublicarNotificacao(new DomainNotification(message.MessageType, error.ErrorMessage));
             }
 
             return false;
