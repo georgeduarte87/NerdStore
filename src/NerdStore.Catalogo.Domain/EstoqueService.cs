@@ -47,7 +47,7 @@ namespace NerdStore.Catalogo.Domain
             return await _produtoRepository.UnitOfWork.Commit();
         }
 
-        public async Task<bool> DebitarListaProdutoPedido(ListaProdutosPedido lista)
+        public async Task<bool> DebitarListaProdutosPedido(ListaProdutosPedido lista)
         {
             foreach(var item in lista.Itens)
             {
